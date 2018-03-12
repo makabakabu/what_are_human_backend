@@ -1,5 +1,4 @@
 import React from 'react';
-import 'antd/dist/antd.css';
 import PropTypes from 'prop-types';
 import Review from './review';
 import Comment from './comment';

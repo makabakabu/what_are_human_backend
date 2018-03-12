@@ -14,6 +14,7 @@
     "graphql-tag": "^2.6.1",
     "history": "^4.7.2",
     "immutable": "^3.8.2",
+    "lodash": "^4.17.5",
     "moment": "^2.20.1",
     "prop-types": "^15.6.0",
     "react": "^16.2.0",
@@ -27,10 +28,13 @@
     "react-router-redux": "^4.0.8",
     "react-scripts": "^1.0.17",
     "react-select": "^1.1.0",
+    "react-spinkit": "^3.0.0",
     "recharts": "^1.0.0-beta.7",
     "redux": "^3.7.2",
     "redux-devtools-extension": "^2.13.2",
     "redux-logger": "^3.0.6",
+    "transit-immutable-js": "^0.7.0",
+    "transit-js": "^0.8.846",
     "uuid": "^3.2.1"
   },
   "scripts": {

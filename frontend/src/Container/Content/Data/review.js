@@ -4,6 +4,7 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'r
 import gql from 'graphql-tag';
 import { graphql } from 'react-apollo';
 import PropTypes from 'prop-types';
+import Spinner from 'react-spinkit';
 
 const reviewChart = gql`
     query reviewChart ($start: String!, $end: String!) {
@@ -16,7 +17,7 @@ const reviewChart = gql`
 
 const Review = ({ data }) => {
     if (data.loading) {
-        return (<div>loading...</div>);
+        return <Spinner name="ball-scale-ripple-multiple" color="coral" />;
     }
     const dataSource = data.reviewChart.map(value => ({ name: value.date, 回复: value.number }));
     return (

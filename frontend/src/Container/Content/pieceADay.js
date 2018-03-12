@@ -3,12 +3,12 @@ import gql from 'graphql-tag';
 import { graphql, compose } from 'react-apollo';
 import { DatePicker, InputNumber } from 'antd';
 import moment from 'moment';
-import 'antd/dist/antd.css';
 import 'font-awesome/css/font-awesome.min.css';
 import { connect } from 'react-redux';
 import uuidv4 from 'uuid';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
+import Spinner from 'react-spinkit';
 
 const pieceADayData = gql`
     query PieceADay($order: Int!){
@@ -30,7 +30,7 @@ const updatePieceADay = gql`
 
 const PieceADay = ({ data, pieceADay, dataPicker, piece, update, deleteContent, textArea, updatePieceADay }) => {
     if (data.loading) {
-        return (<div>loading...</div>);
+        return <Spinner name="ball-scale-ripple-multiple" color="coral" />;
     }
     return (
         <div style={styles.main} >

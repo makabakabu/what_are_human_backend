@@ -3,10 +3,10 @@ import gql from 'graphql-tag';
 import { Link } from 'react-router-dom';
 import { graphql, compose } from 'react-apollo';
 import { AutoComplete, Select, InputNumber } from 'antd';
-import 'antd/dist/antd.css';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
+import Spinner from 'react-spinkit';
 import Review from './review';
 import Comment from './comment';
 import Speech from './speech';
@@ -19,7 +19,6 @@ const allUsers = gql`
             gender
         }
     }
-
 `;
 
 const speechTitle = gql`
@@ -56,7 +55,7 @@ const SpeechControl = ({ speechTitle, allUsers, commentUserName, speechUserName,
         account: Account,
     };
     if (allUsers.loading || speechTitle.loading || commentUserName.loading || speechUserName.loading) {
-        return (<div>loading...</div>);
+        return <Spinner name="ball-scale-ripple-multiple" color="coral" />;
     }
 
     let selector = params.secondPath;
@@ -119,6 +118,7 @@ const SpeechControl = ({ speechTitle, allUsers, commentUserName, speechUserName,
                   style={{ width: 200 }}
                   dataSource={selector === 'speech' ? speechTitleArray : userSource}
                   value={speechControl.get('right')}
+                  defaultValue={speechControl.get('right')}
                   filterOption={(inputValue, option) => option.props.children.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1}
                   onSelect={value => select({ value })}
                 />

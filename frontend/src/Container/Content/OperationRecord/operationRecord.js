@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Select } from 'antd';
-import 'antd/dist/antd.css';
 import PropTypes from 'prop-types';
 import PieceADay from './pieceADay';
 import SystemNews from './systemNews';

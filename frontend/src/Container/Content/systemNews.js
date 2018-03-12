@@ -2,11 +2,11 @@ import React from 'react';
 import { AutoComplete } from 'antd';
 import gql from 'graphql-tag';
 import { graphql, compose } from 'react-apollo';
-import 'antd/dist/antd.css';
 import 'font-awesome/css/font-awesome.min.css';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
+import Spinner from 'react-spinkit';
 
 const query = gql`
     query {
@@ -28,7 +28,7 @@ const createSystemNews = gql`
 
 const SystemNews = ({ data, systemNews, selectContent, createSystemNews, deleteContent, createContent }) => {
     if (data.loading) {
-      return (<div>Loading...</div>);
+      return <Spinner name="ball-scale-ripple-multiple" color="coral" />;
     }
     const dataSource = ['全部用户'];
     data.allUsers.map(value => dataSource.push(value.userName));
@@ -42,7 +42,7 @@ const SystemNews = ({ data, systemNews, selectContent, createSystemNews, deleteC
               dataSource={dataSource}
               value={systemNews.get('userName')}
               filterOption={(inputValue, option) => option.props.children.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1}
-              onSelect={value => selectContent(value)}
+              onSelect={value => selectContent({ value })}
             />
           </div>
           <div style={{ width: '100px', display: 'flex', justifyContent: 'space-between' }}>
@@ -123,6 +123,7 @@ const mapDispatchToProps = dispatch => ({
     },
     createContent: ({ createSystemNews, userName }) => async () => {
         await createSystemNews({ variables: { userName, content: document.getElementById('systemNewsText').value } });
+        window.location.reload();
     },
     deleteContent: () => {
         document.getElementById('systemNewsText').value = '';

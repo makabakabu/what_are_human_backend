@@ -40,21 +40,21 @@ const resolvers = {
             const [{ comment }] = info;
             comment.forEach((item) => {
                 if (item.visibility) {
-                    userNameArray.push(item.userName);
+                    userNameArray.push({ userName: item.userName });
                 }
-                item.recomment.forEach((recommentItem) => { if (recommentItem.visibility) { userNameArray.push(recommentItem.userName); } });
+                item.recomment.forEach((recommentItem) => { if (recommentItem.visibility && !userNameArray.some(value => Map(value).equals(Map({ userName: recommentItem.userName })))) { userNameArray.push({ userName: recommentItem.userName }); } });
             });
-            return userNameArray.map(item => ({ userName: item }));
+            return userNameArray;
         },
         speechUserName: async (data, { title }, { mongo: { Plaza } }) => {
             const info = await Plaza.find({ title }).toArray();
             if (info.length === 0 || !info[0].visibility) {
                 return [];
             }
-            const { review } = info[0];
+            const { discuss } = info[0];
             const userNameArray = [];
-            Map(review).forEach(value => value.forEach((speechUserNameItem) => { if (speechUserNameItem.visibility) { userNameArray.push(speechUserNameItem.userName); } }));
-            return userNameArray.map(item => ({ userName: item }));
+            discuss.forEach(discussItem => discussItem.review.forEach((reviewItem) => { if (reviewItem.visibility) { userNameArray.push({ userName: reviewItem.userName }); } }));
+            return userNameArray;
         },
         academy: async (data, regs, { mongo: { Academy } }) => {
             const pieceArray = await Academy.find({}).toArray();
@@ -88,13 +88,13 @@ const resolvers = {
             return commentsArray;
         },
         allReviews: async (data, { userName, title }, { mongo: { Plaza } }) => {
-            if (userName === '') {
+            if (title === '' || userName === '') {
                 return [];
             }
             const info = await Plaza.find({ title }).toArray();
             const reviewsArray = [];
-            Map(info[0].review).forEach(item => reviewsArray.push(...item.filter(reviewItem => reviewItem.visibility && reviewItem.userName === userName)));
-            return reviewsArray.map(value => ({ title, userName: value.userName, content: value.content, time: value.time, id: value.id.toString() }));
+            info[0].discuss.forEach(discussItem => discussItem.review.forEach((reviewItem) => { if (reviewItem.visibility) { reviewsArray.push(reviewItem); } }));
+            return reviewsArray;
         },
         allSpeechs: async (data, { title }, { mongo: { Plaza } }) => {
             if (title === '') {
@@ -148,7 +148,6 @@ const resolvers = {
                     dataArray.push({ date: value.date, number: value.review });
                 }
             });
-            console.log(dataArray);
             return dataArray;
         },
         commentChart: async (data, { start, end }, { mongo: { Data } }) => {
@@ -167,7 +166,6 @@ const resolvers = {
                     dataArray.push({ date: value.date, number: value.comment });
                 }
             });
-            console.log(dataArray);
             return dataArray;
         },
     },
@@ -337,12 +335,14 @@ const resolvers = {
             return { userName, gender: 'female', time: 'asadfff' };
         },
         updatePieceADay: async (data, { order, date, content }, { mongo: { Academy, OperationRecord } }) => {
-            let response = await Academy.find({ order }).toArray();
+            const response = await Academy.find({ order }).toArray();
             if (response.length > 0) {
-                response = await Academy.update({ order }, { $set: { date } });
-                response = await Academy.update({ order }, { $set: { content } });
+                await Academy.update({ order }, { $set: { date } });
+                await Academy.update({ order }, { $set: { content } });
+            } else {
+                await Academy.insert({ order, date, content, comment: [], revise: [] });
             }
-            response = await OperationRecord.insert({ id: new ObjectId(), kind: 'pieceADay', order, content, time: moment().format('YYYY-MM-DD') });
+            await OperationRecord.insert({ id: new ObjectId(), kind: 'pieceADay', order, content, time: moment().format('YYYY-MM-DD') });
             return { order, content };
         },
         createSystemNews: async (data, regs, { mongo: { SystemNews } }) => {

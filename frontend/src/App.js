@@ -9,6 +9,7 @@ import { ApolloProvider } from 'react-apollo';
 import { createHttpLink } from 'apollo-link-http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import PropTypes from 'prop-types';
+import 'antd/dist/antd.css';
 import Content from './Container/Content/content';
 import LeftPanel from './Container/LeftPanel/leftPanel';
 

@@ -2,10 +2,11 @@ import React from 'react';
 import gql from 'graphql-tag';
 import { graphql, compose } from 'react-apollo';
 import { List } from 'antd';
-import 'antd/dist/antd.css';
 import 'font-awesome/css/font-awesome.min.css';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import Spinner from 'react-spinkit';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 
 const allReviews = gql`
     query allReviews($userName: String!, $title: String!){
@@ -14,7 +15,6 @@ const allReviews = gql`
             content
             time
             id
-            title
         }
     }
 `;
@@ -39,17 +39,18 @@ Cancel.propTypes = {
     removeReview: PropTypes.func.isRequired,
 };
 
-const Review = ({ data, remove, removeReview }) => {
+const Review = ({ speechControl, data, remove, removeReview }) => {
     if (data.loading) {
-        return (<div>Loading...</div>);
+        return <Spinner name="ball-scale-ripple-multiple" color="coral" />;
     }
+    console.log(data);
     return (
         <div style={{ width: '600px', display: 'flex', justifyContent: 'center', backgroundColor: 'transparent', alignItems: 'center' }}>
             <List
               itemLayout="horizontal"
               dataSource={data.allReviews}
               renderItem={item => (
-                <Item actions={[<Cancel id={item.id} title={item.title} remove={remove} removeReview={removeReview} />]} style={{ width: '600px', display: 'flex', justifyContent: 'space-between', backgroundColor: '#f7f7f7', marginTop: '10px', borderRadius: '4px' }}>
+                <Item actions={[<Cancel id={item.id} title={speechControl.get('title')} remove={remove} removeReview={removeReview} />]} style={{ width: '600px', display: 'flex', justifyContent: 'space-between', backgroundColor: '#f7f7f7', marginTop: '10px', borderRadius: '4px' }}>
                     <Item.Meta
                       title={`${item.userName}   ${item.time}`}
                       description={item.content}
@@ -66,6 +67,7 @@ Review.propTypes = {
     data: PropTypes.object.isRequired,
     remove: PropTypes.func.isRequired,
     removeReview: PropTypes.func.isRequired,
+    speechControl: ImmutablePropTypes.map.isRequired,
 };
 
 const mapStateToProps = state => ({

@@ -3,6 +3,7 @@ import gql from 'graphql-tag';
 import { graphql } from 'react-apollo';
 import { PieChart, Pie, Tooltip } from 'recharts';
 import PropTypes from 'prop-types';
+import Spinner from 'react-spinkit'
 
 const allUsers = gql`
     query allUsers {
@@ -14,7 +15,7 @@ const allUsers = gql`
 
 const Account = ({ data }) => {
     if (data.loading) {
-        return (<div>loading...</div>);
+        return <Spinner name="ball-scale-ripple-multiple" color="coral" />;
     }
     let female = 0;
     let male = 0;

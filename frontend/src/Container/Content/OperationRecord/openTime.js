@@ -2,10 +2,10 @@ import React from 'react';
 import gql from 'graphql-tag';
 import { graphql, compose } from 'react-apollo';
 import { List } from 'antd';
-import 'antd/dist/antd.css';
 import 'font-awesome/css/font-awesome.min.css';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import Spinner from 'react-spinkit';
 
 const query = gql`
     query {
@@ -38,7 +38,7 @@ Cancel.propTypes = {
 
 const OpenTime = ({ data, remove, removeOpenTime }) => {
     if (data.loading) {
-        return (<div>Loading...</div>);
+        return <Spinner name="ball-scale-ripple-multiple" color="coral" />;
     }
     const temp = [];
     data.openTime.map(value => temp.splice(0, 0, value));

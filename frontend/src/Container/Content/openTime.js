@@ -3,11 +3,11 @@ import moment from 'moment';
 import gql from 'graphql-tag';
 import { graphql, compose } from 'react-apollo';
 import { TimePicker, DatePicker, List } from 'antd';
-import 'antd/dist/antd.css';
 import 'font-awesome/css/font-awesome.min.css';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
+import Spinner from 'react-spinkit';
 
 const query = gql`
     query {
@@ -51,10 +51,9 @@ Cancel.propTypes = {
 
 const OpenTime = ({ openTime, data, dataPicker, timePicker, createOpenTimeFunc, createOpenTime, remove, removeOpenTime }) => {
     if (data.loading) {
-        return (<div>Loading...</div>);
+        return <Spinner name="ball-scale-ripple-multiple" color="coral" />;
     }
     const temp = [];
-    console.log(data.openTime);
     data.openTime.map(value => temp.splice(0, 0, value));
     return (
         <div style={{ height: '700px', width: '80%', display: 'flex', flexDirection: 'column', alignItems: 'center', fontSize: '12px', color: '#6a6a6a' }} >

@@ -2,10 +2,10 @@ import React from 'react';
 import { Collapse } from 'antd';
 import gql from 'graphql-tag';
 import { graphql, compose } from 'react-apollo';
-import 'antd/dist/antd.css';
 import 'font-awesome/css/font-awesome.min.css';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import Spinner from 'react-spinkit';
 
 const allRevises = gql`
     query allRevises{
@@ -36,7 +36,7 @@ const Revise = ({ data, remove, removeRevise }) => {
         overflow: 'hidden',
     };
     if (data.loading) {
-        return (<div>Loading...</div>);
+        return <Spinner name="ball-scale-ripple-multiple" color="coral" />;
     }
     return (
         <div style={{ width: '80%', height: '500px', marginTop: '150px', display: 'flex', justifyContent: 'center', backgroundColor: 'transparent', overflowX: 'hidden' }}>
@@ -60,7 +60,6 @@ Revise.propTypes = {
 
 const mapDispatchToProps = () => ({
     remove: ({ item, removeRevise }) => async () => {
-        console.log(item);
         await removeRevise({ variables: { id: item.id, order: item.order } });
         window.location.reload();
     },

@@ -2,10 +2,10 @@ import React from 'react';
 import gql from 'graphql-tag';
 import { graphql, compose } from 'react-apollo';
 import { List } from 'antd';
-import 'antd/dist/antd.css';
 import 'font-awesome/css/font-awesome.min.css';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import Spinner from 'react-spinkit';
 
 const allComments = gql`
     query {
@@ -59,7 +59,7 @@ Operation.propTypes = {
 
 const Comment = ({ data, remove, cancel, removeComment, cancelComment }) => {
     if (data.loading) {
-        return (<div>Loading...</div>);
+        return <Spinner name="ball-scale-ripple-multiple" color="coral" />;
     }
     return (
         <div style={{ width: '600px', display: 'flex', justifyContent: 'center', backgroundColor: 'transparent', alignItems: 'center' }}>

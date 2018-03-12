@@ -2,10 +2,10 @@ import React from 'react';
 import { Collapse } from 'antd';
 import gql from 'graphql-tag';
 import { graphql, compose } from 'react-apollo';
-import 'antd/dist/antd.css';
 import 'font-awesome/css/font-awesome.min.css';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import Spinner from 'react-spinkit';
 
 const allSpeechs = gql`
     query allSpeechs($title: String!){
@@ -36,7 +36,7 @@ const Speech = ({ data, removeSpeech, remove }) => {
         overflow: 'hidden',
     };
     if (data.loading) {
-        return (<div>Loading...</div>);
+        return <Spinner name="ball-scale-ripple-multiple" color="coral" />;
     }
     return (
         <div style={{ width: '600px', height: '500px', display: 'flex', justifyContent: 'center', backgroundColor: 'transparent', overflowX: 'hidden' }}>
